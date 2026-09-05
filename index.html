@@ -905,7 +905,7 @@ body.show-hints .ocean-layer { filter: drop-shadow(0 0 14px rgba(255,185,107,0.7
     </div>
 
     <div class="video-wrapper">
-      <video id="video-player" controls></video>
+      <video id="video-player" controls playsinline webkit-playsinline preload="metadata"></video>
       <div id="idle-overlay">
         <div class="idle-arr">←</div>
         <div>Dive into a layer</div>
@@ -921,6 +921,14 @@ body.show-hints .ocean-layer { filter: drop-shadow(0 0 14px rgba(255,185,107,0.7
 <div id="tooltip"></div>
 
 <script>
+/* Force browsers to treat the response as video/mp4 regardless of what the
+   server (GitHub Release / Azure blob) declares. Fixes iOS Safari refusal
+   to play application/octet-stream and improves cross-browser reliability. */
+function setVideoSrc(playerEl, url) {
+  playerEl.innerHTML = `<source src="${url}" type="video/mp4">`;
+  playerEl.load();
+}
+
 /* ═══════════════════════════════════
    CLIP DATA
 ═══════════════════════════════════ */
@@ -1075,8 +1083,7 @@ function selectClip(id) {
   // Video
   const player = document.getElementById('video-player');
   document.getElementById('idle-overlay').style.display = 'none';
-  player.src = encodeURI(clip.video);
-  player.load();
+  setVideoSrc(player, encodeURI(clip.video));
   player.play().catch(() => {});
 
   // Ocean ecological state
