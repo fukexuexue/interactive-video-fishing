@@ -27,6 +27,47 @@ header {
 header h1 { font-size: 0.65rem; font-weight: 400; color: #2a3d52; letter-spacing: 2.5px; text-transform: uppercase; }
 header h2 { font-size: 1rem; font-weight: 500; color: #b8cede; }
 
+/* Interaction guide */
+.help { margin-left: auto; position: relative; }
+.help summary {
+  cursor: pointer; list-style: none; font-size: 0.72rem;
+  padding: 5px 11px; border: 1px solid #1a3a55; border-radius: 4px;
+  color: #6a9ab8; user-select: none; transition: background 0.15s;
+}
+.help summary::-webkit-details-marker { display: none; }
+.help summary::marker { content: ''; }
+.help summary:hover { background: #0b1828; color: #a8becc; }
+.help[open] summary { background: #0e2438; color: #b8cede; border-color: #2a5578; }
+.help-content {
+  position: absolute; top: calc(100% + 8px); right: 0;
+  background: #071627; border: 1px solid #1a3a55; border-radius: 6px;
+  padding: 14px 18px; width: 380px; z-index: 200;
+  font-size: 0.76rem; line-height: 1.6; color: #a8becc;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.7);
+}
+.help-content h3 {
+  font-size: 0.68rem; font-weight: 600; color: #ffb96b;
+  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 8px;
+}
+.help-content ul { padding-left: 18px; margin: 0; }
+.help-content li { margin: 5px 0; }
+.help-content li b { color: #ffb96b; font-weight: 600; }
+.help-content li i { color: #486074; font-style: normal; font-size: 0.7rem; }
+
+/* Pulse hints on interactive elements when help panel is open */
+@keyframes hint-pulse-ocean {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(255,185,107,0)); }
+  50%      { filter: drop-shadow(0 0 12px rgba(255,185,107,0.85)); }
+}
+@keyframes hint-outline-ocean {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255,185,107,0); }
+  50%      { box-shadow: 0 0 0 3px rgba(255,185,107,0.55); }
+}
+body.show-hints #fisherman-group,
+body.show-hints #dynamite-group { animation: hint-pulse-ocean 1.6s ease-in-out infinite; }
+body.show-hints .t-seg { animation: hint-outline-ocean 1.6s ease-in-out infinite; }
+body.show-hints .ocean-layer { filter: drop-shadow(0 0 10px rgba(255,185,107,0.4)); }
+
 .main { flex: 1; display: flex; overflow: hidden; min-height: 0; }
 
 /* ══ OCEAN PANEL ══ */
@@ -190,7 +231,26 @@ header h2 { font-size: 1rem; font-weight: 500; color: #b8cede; }
 <header>
   <h1>Documentary</h1>
   <h2>The Bajo People — Living with the Sea</h2>
+  <details class="help" id="help-panel">
+    <summary>💡 How to interact</summary>
+    <div class="help-content">
+      <h3>Ways to explore</h3>
+      <ul>
+        <li><b>Click an ocean layer</b> — Sky, Shallow, Mid, Deep, Abyss each map to a chapter</li>
+        <li><b>Drag the fisherman ↕</b> — dive up or down through layers to switch chapters</li>
+        <li><b>Drag the dynamite</b> — a destructive-fishing metaphor tied to the crisis chapter</li>
+        <li><b>Hover the ocean</b> — tooltip previews of each layer</li>
+        <li><b>Click a segment on the timeline</b> — jump directly between clips</li>
+      </ul>
+      <i>Tip: open this panel to see all interactive spots glow ✨</i>
+    </div>
+  </details>
 </header>
+<script>
+  document.getElementById('help-panel').addEventListener('toggle', e => {
+    document.body.classList.toggle('show-hints', e.target.open);
+  });
+</script>
 
 <div class="main">
 
